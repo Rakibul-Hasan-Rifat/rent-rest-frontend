@@ -17,15 +17,18 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import loginAction from "../_actions/login-action"
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
 import { LoginStateInterface } from "@/types"
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
+import { Spinner } from "@/components/ui/spinner"
 
 export const initialLoginState: LoginStateInterface = {
   success: false,
   message: "",
   data: {
-      accessToken: "",
-      refreshToken: "",
+    accessToken: "",
+    refreshToken: "",
   },
 }
 
@@ -34,9 +37,22 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
 
+  const router = useRouter()
   const [loginFormState, loginFormAction, loginStatusPending] = useActionState(loginAction, initialLoginState)
 
   console.log("form", loginFormState)
+
+  useEffect(() => {
+    if (loginFormState.success) {
+      toast.add({
+        type: "success",
+        title: "Login ",
+        description: "User loggedin successfully!😎",
+      })
+      router.replace("/")
+
+    }
+  }, [loginFormState.success])
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -73,7 +89,7 @@ export function LoginForm({
                 <Input id="password" type="password" name="password" placeholder="********" required />
               </Field>
               <Field>
-                <Button type="submit" disabled={loginStatusPending}>{loginStatusPending ? "Login processing....." : "Login"}</Button>
+                <Button type="submit" disabled={loginStatusPending}>{loginStatusPending ? <Spinner /> : "Login"}</Button>
                 <Button variant="outline" type="button">
                   Login with Google
                 </Button>
