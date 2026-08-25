@@ -1,10 +1,22 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RegisterForm } from "./_components/register-form";
+import React from "react";
 
-const RegisterPage = () => {
+const RegisterPage = ({...props}: React.ComponentProps<typeof Card>) => {
     return (
         <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm">
-                <RegisterForm />
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Create an account</CardTitle>
+                        <CardDescription>
+                            Enter your information below to create your account
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <RegisterForm />
+                    </CardContent >
+                </Card>
             </div>
         </div>
     );

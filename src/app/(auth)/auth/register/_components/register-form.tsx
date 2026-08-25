@@ -1,11 +1,5 @@
+"use client"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   Field,
   FieldDescription,
@@ -14,57 +8,77 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { useActionState, useEffect } from "react"
+import registerAction from "../_actions/register-action"
+import { RegisterStateInterface } from "@/types"
+import { Spinner } from "@/components/ui/spinner"
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
 
-export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
+const initialRegisterState: RegisterStateInterface = {
+  success: false,
+  message: "",
+  data: {
+    name: "",
+    email: "",
+    password: ""
+  }
+}
+
+export function RegisterForm() {
+
+  const router = useRouter();
+  const [registerFormState, registerFormAction, registerLoading] = useActionState(registerAction, initialRegisterState)
+
+  console.log('register form', registerFormState)
+
+  useEffect(() => {
+    if(registerFormState.success) {
+      toast.add({type: "success", title: "Registration", description: "User registration is successful."})
+      router.push("/auth/login")
+    }
+  }, [registerFormState.success])
+
   return (
-    <Card {...props}>
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>
-          Enter your information below to create your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input id="name" type="text" placeholder="John Doe" required />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input id="password" type="password" required />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="confirm-password">
-                Confirm Password
-              </FieldLabel>
-              <Input id="confirm-password" type="password" required />
-              <FieldDescription>Please confirm your password.</FieldDescription>
-            </Field>
-            <FieldGroup>
-              <Field>
-                <Button type="submit">Create Account</Button>
-                <Button variant="outline" type="button">
-                  Sign up with Google
-                </Button>
-                <FieldDescription className="px-6 text-center">
-                  Already have an account? <Link href="/auth/login">Sign in</Link>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+    <form action={registerFormAction}>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="name">Full Name</FieldLabel>
+          <Input id="name" name="name" type="text" placeholder="Mohammad | Ahmad" required />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="m@example.com"
+            required
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="password">Password</FieldLabel>
+          <Input id="password" type="password" name="password" required />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="confirm-password">
+            Confirm Password
+          </FieldLabel>
+          <Input id="confirm-password" type="password" name="confirm-password" required />
+          <FieldDescription>Please confirm your password.</FieldDescription>
+        </Field>
+        <FieldGroup>
+          <Field>
+            <Button type="submit" disabled={registerLoading}>{registerLoading ? <Spinner /> : "Create Account"}</Button>
+            <Button variant="outline" type="button">
+              Sign up with Google
+            </Button>
+            <FieldDescription className="px-6 text-center">
+              Already have an account? <Link href="/auth/login">Sign in</Link>
+            </FieldDescription>
+          </Field>
+        </FieldGroup>
+      </FieldGroup>
+    </form>
   )
 }

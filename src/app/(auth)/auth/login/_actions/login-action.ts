@@ -28,7 +28,10 @@ const loginAction = async (initialState: LoginStateInterface, formData: FormData
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({
+            email: parsedData.data.email,
+            password: parsedData.data.password
+        })
     })
 
     if (!response.ok) {
