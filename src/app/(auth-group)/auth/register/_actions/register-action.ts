@@ -8,6 +8,7 @@ const registerAction = async (initialState: RegisterStateInterface, formData: Fo
 
     const name = formData.get("name")
     const email = formData.get("email")
+    const role = formData.get("role")
     const password = formData.get("password")
     const confirmPassword = formData.get("confirm-password");
 
@@ -16,11 +17,12 @@ const registerAction = async (initialState: RegisterStateInterface, formData: Fo
     const registerFormSchema = z.object({
         name: z.string("Name is required.").min(3, "Name length must contain at least 2 charrecters."),
         email: z.email("Email is required."),
+        role: z.enum(["TENANT", "LANDLORD"]),
         password: z.string("Password is required.").min(5, "Password should contain at least 5 charecters."),
         confirmPassword: z.string("Confirm-Password is required.").min(5, "Confirm-Password should contain least 5 charecters")
     }).refine((data) => data.password === data.confirmPassword, "Password and confir-password should have the save value.")
 
-    const parsedData = registerFormSchema.safeParse({ name, email, password, confirmPassword });
+    const parsedData = registerFormSchema.safeParse({ name, email, password, confirmPassword, role });
 
     if (!parsedData.success) {
         return {
@@ -37,6 +39,7 @@ const registerAction = async (initialState: RegisterStateInterface, formData: Fo
         },
         body: JSON.stringify({
             name: parsedData.data.name,
+            role: parsedData.data.role,
             email: parsedData.data.email,
             password: parsedData.data.password
         })

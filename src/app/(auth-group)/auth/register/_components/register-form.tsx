@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button"
 import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
@@ -14,6 +15,7 @@ import { RegisterStateInterface } from "@/types"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "@/components/ui/toast"
 import { useRouter } from "next/navigation"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const initialRegisterState: RegisterStateInterface = {
   success: false,
@@ -25,6 +27,11 @@ const initialRegisterState: RegisterStateInterface = {
   }
 }
 
+const ROLES = [
+  { value: "TENANT", label: "Tenant" },
+  { value: "LANDLORD", label: "Landlord" }
+]
+
 export function RegisterForm() {
 
   const router = useRouter();
@@ -33,8 +40,8 @@ export function RegisterForm() {
   console.log('register form', registerFormState)
 
   useEffect(() => {
-    if(registerFormState.success) {
-      toast.add({type: "success", title: "Registration", description: "User registration is successful."})
+    if (registerFormState.success) {
+      toast.add({ type: "success", title: "Registration", description: "User registration is successful." })
       router.push("/auth/login")
     }
   }, [registerFormState.success])
@@ -66,6 +73,25 @@ export function RegisterForm() {
           </FieldLabel>
           <Input id="confirm-password" type="password" name="confirm-password" required />
           <FieldDescription>Please confirm your password.</FieldDescription>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="role">
+            Role
+          </FieldLabel>
+          <RadioGroup name="role" defaultValue={ROLES[0].value} className="w-fit flex">
+            {
+              ROLES.map((role) => (
+                <FieldLabel htmlFor={role.label} key={role.label}>
+                  <Field orientation="horizontal">
+                    <FieldContent>
+                      <FieldLabel>{role.label}</FieldLabel>
+                    </FieldContent>
+                    <RadioGroupItem value={role.value} id={role.label} />
+                  </Field>
+                </FieldLabel>
+              ))
+            }
+          </RadioGroup>
         </Field>
         <FieldGroup>
           <Field>
