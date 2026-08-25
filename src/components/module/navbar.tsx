@@ -24,7 +24,7 @@ export function Navbar() {
     <header className="border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/75">
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-6 px-6"
+        className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-6 px-6 bg-white"
       >
         <Link href="#" className="flex items-center gap-2.5 justify-self-start" aria-label="Northstar home">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
