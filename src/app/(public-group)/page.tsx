@@ -1,4 +1,4 @@
-import { HeroBanner } from "@/components/module/hero-banner";
+import { HeroBanner } from "@/app/(public-group)/_components/hero-banner";
 
 export default function Home() {
   return (

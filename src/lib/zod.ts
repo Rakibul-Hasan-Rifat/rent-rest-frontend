@@ -1,6 +1,6 @@
 import z from "zod";
 
-const parsedData = (zodSchema, payload) => {
+const parsedData = <T>(zodSchema: z.ZodObject, payload: T) => {
     return zodSchema.parse({...payload});
 }
 

@@ -34,3 +34,11 @@ export interface User {
     email: string
     role: "TENANT" | "LANDLORD" | "ADMIN"
 }
+
+export interface IResponse<T> {
+    success: boolean
+    message: string
+    data: T,
+    meta?: {},
+    error?: {}
+}

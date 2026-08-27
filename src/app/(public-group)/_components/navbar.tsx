@@ -1,17 +1,19 @@
 import Link from 'next/link'
-import { ChevronDown, LogOut, Menu, Settings, UserRound } from 'lucide-react'
+import { Menu } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import getMe from '@/service/get-me'
+import UserMenu from './user-menu'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Spinner } from "@/components/ui/spinner"
+import { User } from '@/types'
+import { Suspense } from 'react'
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -19,7 +21,11 @@ const navItems = [
   { label: 'Resources', href: '#' },
 ]
 
-export function Navbar() {
+export async function Navbar() {
+
+  const myProfile = await getMe()
+  const userData = myProfile?.data;
+
   return (
     <header className="border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/75">
       <nav
@@ -38,16 +44,14 @@ export function Navbar() {
             <Link
               key={item.label}
               href={item.href}
-              className={`rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted hover:text-foreground ${
-                index === 0 ? 'bg-muted font-medium text-foreground' : 'text-muted-foreground'
-              }`}
+              className={`rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted hover:text-foreground ${index === 0 ? 'bg-muted font-medium text-foreground' : 'text-muted-foreground'
+                }`}
               aria-current={index === 0 ? 'page' : undefined}
             >
               {item.label}
             </Link>
           ))}
         </div>
-
         <div className="flex items-center gap-1 justify-self-end">
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -66,39 +70,17 @@ export function Navbar() {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant="ghost" size="sm" className="gap-2 px-2" />}
-            >
-              <Avatar size="sm">
-                <AvatarFallback>AL</AvatarFallback>
-              </Avatar>
-              <span className="hidden text-sm font-medium sm:inline">Alex Lee</span>
-              <ChevronDown className="hidden sm:inline" aria-hidden="true" />
-              <span className="sr-only">Open user menu</span>
-            </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>
-                <span className="block">Alex Lee</span>
-                <span className="block font-normal text-muted-foreground">alex@example.com</span>
-              </DropdownMenuLabel>
-              <DropdownMenuItem>
-                <UserRound aria-hidden="true" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings aria-hidden="true" />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
-              <LogOut aria-hidden="true" />
-              Sign out
-            </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {
+            userData ? (
+              <Suspense fallback={<Spinner />}>
+                <UserMenu user={userData as User} />
+              </Suspense>
+            ) : (
+              <Link href="/auth/login">
+                <Button size={'lg'}>Login</Button>
+              </Link>
+            )
+          }
         </div>
       </nav>
     </header>

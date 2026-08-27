@@ -23,7 +23,7 @@ const loginAction = async (initialState: LoginStateInterface, formData: FormData
         }
     }
 
-    const response = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
+    const response = await fetch(`${process.env.LOCAL_BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -51,15 +51,15 @@ const loginAction = async (initialState: LoginStateInterface, formData: FormData
 
     cookieStore.set("access-token", result.data.accessToken, {
         httpOnly: true,
-        sameSite: "lax",
         maxAge: 60 * 60 * 24,
-        secure: false
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     })
     cookieStore.set("refresh-token", result.data.refreshToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 7,
-        sameSite: "lax",
-        secure: false
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     })
 
     return {

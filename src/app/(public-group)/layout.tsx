@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/module/navbar';
+import { Navbar } from '@/app/(public-group)/_components/navbar';
 import { HTMLAttributes } from 'react';
 
 
