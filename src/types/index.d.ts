@@ -9,7 +9,6 @@ export interface LoginStateInterface {
     error?: Record<string, unknown> | null
 }
 
-
 export interface RegisterStateInterface {
     success: boolean
     message: string
@@ -27,4 +26,11 @@ export interface RegisterStateInterface {
     }
     meta?: Record<string, unknown>
     error?: Record<string, unknown> | null
+}
+
+export interface User {
+    id: string
+    name: string
+    email: string
+    role: "TENANT" | "LANDLORD" | "ADMIN"
 }

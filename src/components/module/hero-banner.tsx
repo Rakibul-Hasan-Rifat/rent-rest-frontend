@@ -10,6 +10,9 @@ export function HeroBanner() {
         src="/images/rental-hero.png"
         alt="A welcoming modern rental home at golden hour"
         className="absolute inset-0 h-full w-full object-cover"
+        width={500}
+        height={500}
+        loading="eager"
       />
 
       {/* Dark overlay for text contrast */}
