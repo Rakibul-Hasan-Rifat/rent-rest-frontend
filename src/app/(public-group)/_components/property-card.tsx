@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Property } from "@/types";
 import { ArrowUpRight, Bath, BedDouble, MapPin, Ruler } from "lucide-react"
 import Image from "next/image";
+import Link from "next/link";
 
 const STATUS_STYLES = {
   AVAILABLE: "bg-emerald-600 text-white hover:bg-emerald-600",
@@ -29,10 +30,10 @@ const PropertyCard = async ({ property }: { property: Property }) => {
 
   return (
     <Card className="group overflow-hidden border-neutral-200 bg-white py-0 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-      <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+      <div className="relative aspect-4/3 overflow-hidden bg-neutral-100">
         {
           <Image
-            src={property.images[0] ? property.images[0] : "https://images.unsplash.com/photo-1580587771525-78b9dba3b914"}
+            src={property.images[0] ? property.images[0] : "/images/card-image-placeholder.png"}
             alt={property.title || "Property Image"}
             width={300}
             height={300}
@@ -45,7 +46,7 @@ const PropertyCard = async ({ property }: { property: Property }) => {
           {STATUS_LABEL[property.status]}
         </Badge>
         {property.status}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-8">
+        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-4 pb-3 pt-8">
           <span className="text-lg font-semibold text-white">
             ৳{property.price}
           </span>
@@ -82,13 +83,15 @@ const PropertyCard = async ({ property }: { property: Property }) => {
       </CardContent>
 
       <CardFooter className="px-4 py-2">
-        <Button
-          variant="destructive"
-          className="w-full justify-between border-neutral-200 text-sm font-medium"
-        >
-          View details
-          <ArrowUpRight className="h-4 w-4" />
-        </Button>
+        <Link href={`/properties/${property.id}`} className="w-full ">
+          <Button
+            variant="destructive"
+            className="w-full justify-between border-neutral-200 text-sm font-medium"
+          >
+            View details
+            <ArrowUpRight className="h-4 w-4" />
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   )

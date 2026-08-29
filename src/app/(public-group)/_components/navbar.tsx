@@ -14,6 +14,7 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { User } from '@/types'
 import { Suspense } from 'react'
+import NavLink from './nav-link'
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -32,7 +33,7 @@ export async function Navbar() {
         aria-label="Main navigation"
         className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-6 px-6 bg-white"
       >
-        <Link href="#" className="flex items-center gap-2.5 justify-self-start" aria-label="Northstar home">
+        <Link href="/" className="flex items-center gap-2.5 justify-self-start" aria-label="Northstar home">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
             <Home className="h-4 w-4" />
           </span>
@@ -41,15 +42,7 @@ export async function Navbar() {
 
         <div className="hidden items-center gap-1 md:flex grow justify-center">
           {navItems.map((item, index) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted hover:text-foreground ${index === 0 ? 'bg-muted font-medium text-foreground' : 'text-muted-foreground'
-                }`}
-              aria-current={index === 0 ? 'page' : undefined}
-            >
-              {item.label}
-            </Link>
+            <NavLink key={index} item={item} />
           ))}
         </div>
         <div className="flex items-center gap-1 justify-self-end">

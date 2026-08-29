@@ -104,9 +104,9 @@ export default function Footer() {
                                 <Input
                                     type="email"
                                     placeholder="you@email.com"
-                                    className="min-w-0 flex-1 border-neutral-700 bg-neutral-800 text-sm text-white placeholder:text-neutral-500 focus-visible:ring-emerald-600"
+                                    className="min-w-0 flex-1 border-neutral-700 bg-neutral-800 text-sm text-white focus-visible:ring-primary"
                                 />
-                                <Button type="submit" size="icon" className="shrink-0 hover:bg-primary">
+                                <Button type="submit" size="icon" className="shrink-0 hover:bg-primary hover:text-primary-foreground" variant="destructive">
                                     <ArrowRight className="h-4 w-4" />
                                 </Button>
                             </form>
@@ -119,10 +119,10 @@ export default function Footer() {
                 <div className="flex flex-col items-center gap-4 text-center text-sm text-neutral-500 sm:flex-row sm:justify-between sm:text-left">
                     <p>&copy; {year} Basha. All rights reserved.</p>
                     <div className="flex gap-6">
-                        <Link href="/privacy" className="transition-colors hover:text-emerald-500">
+                        <Link href="/privacy" className="transition-colors hover:text-rose-500/70">
                             Privacy Policy
                         </Link>
-                        <Link href="/terms" className="transition-colors hover:text-emerald-500">
+                        <Link href="/terms" className="transition-colors hover:text-rose-500/70">
                             Terms of Service
                         </Link>
                     </div>

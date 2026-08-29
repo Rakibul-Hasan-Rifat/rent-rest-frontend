@@ -5,7 +5,7 @@ import LoadingCards from "./loading-cards";
 
 // const properties: unknown[] = []
 
-const getProperties = async () => {
+const getProperties = async (all: boolean) => {
     const response: Response = await fetch(`${process.env.LOCAL_BACKEND_URL}/properties`)
 
     if (!response.ok) {
@@ -15,12 +15,12 @@ const getProperties = async () => {
     const result: IResponse<Property[]> = await response.json();
     const properties = result.data
     console.log(properties)
-    return result.data;
+    return properties.splice(0, all ? properties.length : 6);
 }
 
-const PropertyContainer = async () => {
+const PropertyContainer = async ({ all = false }: { all?: boolean }) => {
 
-    const properties = await getProperties();
+    const properties = await getProperties(all);
 
 
     return (
@@ -31,14 +31,14 @@ const PropertyContainer = async () => {
                         Available properties
                     </h2>
                     <span className="text-sm text-neutral-500">
-                        {properties.slice(0, 6).length} listings
+                        {properties.length} listings
                     </span>
                 </div>
 
                 <Suspense >
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                         <Suspense fallback={Array.from({ length: 3 }).map((_, i) => (<LoadingCards key={i} />))}>
-                            {properties?.slice(0, 6).map((property) => (
+                            {properties?.map((property) => (
                                 <PropertyCard key={property.id} property={property} />
                             ))}
                         </Suspense>
