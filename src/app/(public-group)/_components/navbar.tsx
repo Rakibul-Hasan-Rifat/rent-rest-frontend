@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Menu } from 'lucide-react'
+import { Home, Menu } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import getMe from '@/service/get-me'
@@ -34,9 +34,9 @@ export async function Navbar() {
       >
         <Link href="#" className="flex items-center gap-2.5 justify-self-start" aria-label="Northstar home">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground">
-            N
+            <Home className="h-4 w-4" />
           </span>
-          <span className="font-semibold tracking-tight">Northstar</span>
+          <span className="font-semibold tracking-tight">Basha</span>
         </Link>
 
         <div className="hidden items-center gap-1 md:flex grow justify-center">

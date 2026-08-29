@@ -42,3 +42,30 @@ export interface IResponse<T> {
     meta?: {},
     error?: {}
 }
+
+export type PropertyPricePeriod = "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+ 
+export type PropertyStatus = "AVAILABLE" | "RENTED" | "UNAVAILABLE";
+ 
+export interface Property {
+  id: string;
+  title: string;
+  description: string | null;
+  addressLine: string;
+  city: string;
+  district: string;
+  zipCode: number | null;
+  latitude: number | null;
+  longitude: number | null;
+  price: string; // Decimal — comes over JSON as a string, parse with Number() before formatting
+  pricePeriod: PropertyPricePeriod;
+  bedrooms: string | null;
+  bathrooms: string | null;
+  areaSqft: string | null;
+  status: PropertyStatus;
+  images: string[];
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
+  landlordId: string;
+  categoryId: string | null;
+}
