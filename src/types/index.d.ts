@@ -57,15 +57,15 @@ export interface Property {
   zipCode: number | null;
   latitude: number | null;
   longitude: number | null;
-  price: string; // Decimal — comes over JSON as a string, parse with Number() before formatting
+  price: number;
   pricePeriod: PropertyPricePeriod;
   bedrooms: string | null;
   bathrooms: string | null;
   areaSqft: string | null;
   status: PropertyStatus;
   images: string[];
-  createdAt: string; // ISO 8601
-  updatedAt: string; // ISO 8601
+  createdAt: Date;
+  updatedAt: Date;
   landlordId: string;
   categoryId: string | null;
 }
