@@ -44,28 +44,35 @@ export interface IResponse<T> {
 }
 
 export type PropertyPricePeriod = "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
- 
+
 export type PropertyStatus = "AVAILABLE" | "RENTED" | "UNAVAILABLE";
- 
+
 export interface Property {
-  id: string;
-  title: string;
-  description: string | null;
-  addressLine: string;
-  city: string;
-  district: string;
-  zipCode: number | null;
-  latitude: number | null;
-  longitude: number | null;
-  price: number;
-  pricePeriod: PropertyPricePeriod;
-  bedrooms: string | null;
-  bathrooms: string | null;
-  areaSqft: string | null;
-  status: PropertyStatus;
-  images: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  landlordId: string;
-  categoryId: string | null;
+    id: string;
+    title: string;
+    description: string | null;
+    addressLine: string;
+    city: string;
+    district: string;
+    zipCode: number | null;
+    latitude: number | null;
+    longitude: number | null;
+    price: number;
+    pricePeriod: PropertyPricePeriod;
+    bedrooms: string | null;
+    bathrooms: string | null;
+    areaSqft: string | null;
+    status: PropertyStatus;
+    images: string[];
+    createdAt: Date;
+    updatedAt: Date;
+    landlordId: string;
+    categoryId: string | null;
+}
+
+export interface RentRequestState {
+    startDate: string
+    endDate: string
+    propertyId: string
+    // tenantId: string
 }

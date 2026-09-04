@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -13,6 +12,8 @@ import {
     ExternalLink,
 } from "lucide-react";
 import { IResponse, Property } from "@/types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import DateRangePicker from "./_components/date-range-picker";
 
 const STATUS_STYLES = {
     AVAILABLE: "bg-emerald-600 text-white hover:bg-emerald-600",
@@ -164,14 +165,24 @@ export default async function PropertyDetails({
                                 </span>
                             </div>
 
-                            <Button
-                                className="mt-4 w-full "
-                                disabled={property.status !== "AVAILABLE"}
-                            >
-                                {property.status === "AVAILABLE"
-                                    ? "Request to book"
-                                    : STATUS_LABEL[property.status]}
-                            </Button>
+                            <Dialog>
+                                {/* <DialogTrigger> */}
+
+                                <DialogTrigger
+                                    className="mt-4 w-full border p-1.5 bg-primary text-primary-foreground cursor-pointer"
+                                    disabled={property.status !== "AVAILABLE"}
+                                >
+                                    {property.status === "AVAILABLE"
+                                        ? "Request to book"
+                                        : STATUS_LABEL[property.status]}
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Choose renting date</DialogTitle>
+                                    </DialogHeader>
+                                    <DateRangePicker propertyId={propertyId} />
+                                </DialogContent>
+                            </Dialog>
 
                             <div className="mt-4 flex items-center gap-1.5 text-xs text-neutral-500">
                                 <CalendarDays className="h-3.5 w-3.5" />
