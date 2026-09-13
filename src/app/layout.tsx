@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Serif, Public_Sans, Inter } from "next/font/goo
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -33,8 +34,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-zinc-100">
         <main>
-          {children}
-          <Toaster  />
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
+          <Toaster />
         </main>
       </body>
 

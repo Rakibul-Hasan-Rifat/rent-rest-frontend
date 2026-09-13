@@ -2,9 +2,10 @@
 
 import { IResponse, Property } from "@/types";
 import jwt from "jsonwebtoken"
-import { z } from "zod";
+import { success, z } from "zod";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 const propertySchema = z.object({
     id: z.uuid().optional(), // Prisma generates
@@ -35,7 +36,7 @@ const propertySchema = z.object({
     //   review: z.array(z.any()).optional(), // replace with Review schema
 });
 
-const createPropertyAction = async (initialState: IResponse<Property | null>, formData: FormData) => {
+export const createPropertyAction = async (initialState: IResponse<Property | null>, formData: FormData) => {
 
     const formInfo = Object.fromEntries(formData);
     const images = formInfo.images ? (formInfo.images as string).split(",").map(image => image.startsWith(" ") || image.endsWith(" ") ? image.trim() : image) : []
@@ -95,4 +96,44 @@ const createPropertyAction = async (initialState: IResponse<Property | null>, fo
     return result;
 }
 
-export default createPropertyAction;
+export const getPropertiesByLandlordAction = async () => {
+
+    const cookieStore = await cookies()
+
+    const accessToken = cookieStore.get("access-token")?.value
+
+    if (!accessToken) {
+        return {
+            success: false,
+            message: "User not logged in 😒",
+            data: null
+        }
+    }
+
+    const decodedAccessToken = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string)
+
+    if (typeof decodedAccessToken === "string") {
+        return {
+            success: false,
+            message: decodedAccessToken,
+            data: null
+        }
+    }
+
+    console.log(decodedAccessToken, "decoded-access-token")
+
+    const response = await fetch(`${process.env.LOCAL_BACKEND_URL}/landlord/properties`, {
+        headers: {
+            authorization: `Bearer ${accessToken}`
+        },
+        cache: "force-cache",
+        next: {
+            tags: ["landlord-properties"],
+        },        
+    });
+    
+    const result = await response.json();
+
+    return result;
+
+}

@@ -6,17 +6,43 @@ import { Field } from "@/components/ui/field";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import rentRequestAction from "../_actions/rent-request-action";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/toast";
 
 export default function DateRangePicker({ propertyId }: { propertyId: string }) {
 
-    const [state, action, pending] = useActionState(rentRequestAction, { startDate: '', endDate: '', propertyId: '' })
+    const router = useRouter();
+    const [state, action, pending] = useActionState(rentRequestAction, { success: false, message: "", data: { startDate: '', endDate: '', propertyId: '' } })
     const [date, setDate] = useState<DateRange | undefined>({
         from: new Date(),
         to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
     })
+
+
+    useEffect(() => {
+        console.log("state", state)
+        if (state.success) {
+            toast.add({
+                type: "success",
+                title: "Rental request",
+                description: "Request for renting a house is done successfully!"
+            })
+            router.push("/dashboard/tenant")
+        }
+
+        if (!state.success && !pending) {
+            toast.add({
+                type: "error",
+                title: "Rental request",
+                description: `${state.message}.\n Request for renting a house is failed. Try again.`
+            })
+            router.refresh()
+        }
+    }
+        , [state.message])
 
     console.log(date?.from?.toISOString(), date?.to?.toISOString(), propertyId, state, action)
 

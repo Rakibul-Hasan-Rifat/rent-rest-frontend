@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useActionState, useEffect } from "react"
-import createPropertyAction from "../_actions/create-property-action"
 import { PropertyPricePeriod, PropertyStatus } from "@/types"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "@/components/ui/toast"
+import { createPropertyAction } from "../_actions/property-actions"
 
 export const initialPropertyState = {
   success: false,

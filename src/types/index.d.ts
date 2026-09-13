@@ -70,9 +70,16 @@ export interface Property {
     categoryId: string | null;
 }
 
-export interface RentRequestState {
+export type RentRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED" | "CANCELLED"
+
+export interface RentRequest {
+    id?: string
     startDate: string
     endDate: string
     propertyId: string
-    // tenantId: string
+    tenantId?: string
+    status?: RentRequestStatus
+    createdAt?: Date
+    updatedAt?: Date
+    respondedAt?: Date
 }
