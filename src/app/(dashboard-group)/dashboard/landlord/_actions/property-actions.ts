@@ -36,6 +36,9 @@ const propertySchema = z.object({
     //   review: z.array(z.any()).optional(), // replace with Review schema
 });
 
+const cookieStore = await cookies();
+const accessToken = cookieStore.get("access-token")?.value
+
 export const createPropertyAction = async (initialState: IResponse<Property | null>, formData: FormData) => {
 
     const formInfo = Object.fromEntries(formData);
@@ -43,8 +46,6 @@ export const createPropertyAction = async (initialState: IResponse<Property | nu
     const addressLine = formInfo.address;
     const price = Number(formInfo.price);
 
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("access-token")?.value
 
     if (!accessToken) {
         redirect("/auth/login")
@@ -79,12 +80,12 @@ export const createPropertyAction = async (initialState: IResponse<Property | nu
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         },
-        body: JSON.stringify(parsedData.data)
+        body: JSON.stringify(parsedData.data),
     })
-    
+
     const result: IResponse<Property> = await response.json();
-    
-    if (result.error) {
+
+    if (result.error || !result.success) {
         return {
             success: false,
             message: "Propery creation failed!",
@@ -93,14 +94,12 @@ export const createPropertyAction = async (initialState: IResponse<Property | nu
         }
     }
 
+    revalidateTag("lanlord-properties", { expire: 0 })
+
     return result;
 }
 
 export const getPropertiesByLandlordAction = async () => {
-
-    const cookieStore = await cookies()
-
-    const accessToken = cookieStore.get("access-token")?.value
 
     if (!accessToken) {
         return {
@@ -115,7 +114,7 @@ export const getPropertiesByLandlordAction = async () => {
     if (typeof decodedAccessToken === "string") {
         return {
             success: false,
-            message: decodedAccessToken,
+            message: decodedAccessToken || "Token is invalid",
             data: null
         }
     }
@@ -129,11 +128,63 @@ export const getPropertiesByLandlordAction = async () => {
         cache: "force-cache",
         next: {
             tags: ["landlord-properties"],
-        },        
+        },
     });
-    
+
     const result = await response.json();
 
     return result;
 
+}
+
+export const deletePropertyByLandlordAction = async (
+    id: string
+) => {
+    console.log('delete button', id)
+
+    const doesPropertyExist: IResponse<Property | null> = await (await fetch(`${process.env.LOCAL_BACKEND_URL}/properties/${id}`)).json()
+
+    if (!doesPropertyExist.success) {
+        return {
+            ...doesPropertyExist,
+            success: false,
+            message: doesPropertyExist.message || "Property with id is not found!",
+        }
+    }
+
+    if (!accessToken) {
+        return {
+            success: false,
+            message: "User not logged in 😒",
+            data: null
+        }
+    }
+
+    const decodedAccessToken = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string)
+
+    if (typeof decodedAccessToken === "string") {
+        return {
+            success: false,
+            message: decodedAccessToken || "Token is invalid",
+            data: null
+        }
+    }
+
+    const result: IResponse<null> = await (await fetch(`${process.env.LOCAL_BACKEND_URL}/landlord/properties/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        }
+    })).json()
+
+    if (!result.success || result.error) {
+        return {
+            success: false,
+            message: result.message || "Property not deleted successfully!"
+        }
+    }
+
+    revalidateTag("landlord-properties", { expire: 0 })
+
+    return result;
 }

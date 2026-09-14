@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { Property } from "@/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import DeleteButton from "./delete-button";
+import EditButton from "./edit-button";
 
 
 const periodLabel = {
@@ -66,12 +68,8 @@ export default function LandlordPropertyCard({ property }: { property: Property 
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" aria-label="Edit listing">
-                            <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="icon" className="text-red-600 hover:text-red-700 hover:bg-red-50" aria-label="Delete listing">
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <EditButton />
+                        <DeleteButton propertyId={property.id}/>
                     </div>
                 </CardFooter>
             </Card>
