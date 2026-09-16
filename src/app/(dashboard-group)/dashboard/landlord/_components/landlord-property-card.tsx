@@ -5,7 +5,7 @@ import { MapPin, Pencil, Trash2 } from "lucide-react";
 import { Property } from "@/types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import DeleteButton from "./delete-button";
-import EditButton from "./edit-button";
+import EditButton from "./edit-property";
 
 
 const periodLabel = {
@@ -22,6 +22,9 @@ const statusStyle: { AVAILABLE: string, RENTED: string, UNAVAILABLE: string } = 
 };
 
 export default function LandlordPropertyCard({ property }: { property: Property }) {
+
+    // console.log(property)
+
     return (
         <div className="w-full flex items-center justify-center bg-neutral-50 p-2 self-stretch">
             <Card className="w-full h-full max-w-sm flex flex-col justify-between shadow-sm ">
@@ -55,9 +58,11 @@ export default function LandlordPropertyCard({ property }: { property: Property 
                     </div>
 
                     <p className="text-sm text-neutral-600">
-                        {property.description ?? (
-                            <span className="italic text-neutral-400">No description added yet.</span>
-                        )}
+                        {
+                            !property.description ? (
+                                <span className="italic text-neutral-400">No description added yet.</span>
+                            ) : property.description
+                        }
                     </p>
                 </CardContent>
 
@@ -68,8 +73,8 @@ export default function LandlordPropertyCard({ property }: { property: Property 
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <EditButton />
-                        <DeleteButton propertyId={property.id}/>
+                        <EditButton propertyId={property.id} property={property} />
+                        <DeleteButton propertyId={property.id} />
                     </div>
                 </CardFooter>
             </Card>

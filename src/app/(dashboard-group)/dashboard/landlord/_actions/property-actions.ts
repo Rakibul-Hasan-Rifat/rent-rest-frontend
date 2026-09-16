@@ -188,3 +188,39 @@ export const deletePropertyByLandlordAction = async (
 
     return result;
 }
+
+export const updatePropertyByLandlordAction = async (propertyId: string, initialState: IResponse<Property>, formData: FormData) => {
+    console.log('property-id in property-update-action', propertyId, formData)
+
+    const formInfo = Object.fromEntries(formData);
+    const images = formInfo.images ? (formInfo.images as string).split(",").map(image => image.startsWith(" ") || image.endsWith(" ") ? image.trim() : image) : []
+    const price = Number(formInfo.price);
+
+    if (!accessToken) {
+        redirect("/auth/login")
+    }
+
+    const decoded = jwt.decode(accessToken)
+
+    if (typeof decoded === 'string' || null) {
+        redirect("/auth/login")
+    }
+
+
+    const result: IResponse<Property> = await (await fetch(`${process.env.LOCAL_BACKEND_URL}/landlord/properties/${propertyId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+            ...formInfo,
+            images,
+            price
+        })
+    })).json()
+
+    revalidateTag("landlord-properties", { expire: 0 })
+
+    return result
+}

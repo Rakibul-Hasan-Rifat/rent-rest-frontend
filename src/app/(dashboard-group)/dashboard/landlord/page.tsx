@@ -1,4 +1,4 @@
-import { GlobeX, GlobeXIcon } from "lucide-react"
+import { GlobeX } from "lucide-react"
 import { getPropertiesByLandlordAction } from "./_actions/property-actions"
 import LandlordPropertyCard from "./_components/landlord-property-card"
 import { IResponse, Property } from "@/types"
@@ -19,8 +19,6 @@ export default async function LandlordDashboardPage() {
             </>
         )
     }
-
-    console.log(data)
 
     return (
         <>
