@@ -77,7 +77,9 @@ export interface RentRequest {
     startDate: string
     endDate: string
     propertyId: string
+    property: Property
     tenantId?: string
+    tenant: User
     status?: RentRequestStatus
     createdAt?: Date
     updatedAt?: Date
